@@ -1,9 +1,7 @@
-from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
 from datetime import datetime
-
-Base = declarative_base()
+from database import Base
 
 class Process(Base):
     __tablename__ = 'processes'
@@ -24,8 +22,3 @@ class Log(Base):
     log_entry = Column(Text)
     created_at = Column(DateTime, default=datetime.now)
     process = relationship("Process", back_populates="logs")
-
-# 创建数据库引擎和表
-engine = create_engine('sqlite:///f:\\ProcessManagement\\process.db')
-Base.metadata.create_all(engine)
-Session = sessionmaker(bind=engine)
