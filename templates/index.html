@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>创建进程</title>
+    <meta charset="UTF-8">
+    <style>
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>创建新进程</h2>
+    <div class="form-group">
+        <label for="name">进程名称：</label>
+        <input type="text" id="name" required>
+    </div>
+    <div class="form-group">
+        <label for="description">描述：</label>
+        <textarea id="description"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="status">状态：</label>
+        <select id="status">
+            <option value="运行中">运行中</option>
+            <option value="停止">停止</option>
+            <option value="等待中">等待中</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="priority">优先级：</label>
+        <select id="priority">
+            <option value="高">高</option>
+            <option value="中">中</option>
+            <option value="低">低</option>
+        </select>
+    </div>
+    <button onclick="createProcess()">创建进程</button>
+
+    <script>
+        async function createProcess() {
+            const processData = {
+                name: document.getElementById('name').value,
+                description: document.getElementById('description').value,
+                status: document.getElementById('status').value,
+                priority: document.getElementById('priority').value
+            };
+
+            try {
+                const response = await fetch('/processes/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(processData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('创建失败');
+                }
+
+                const result = await response.json();
+                alert('进程创建成功！');
+                // 可以选择重置表单或跳转到其他页面
+                document.getElementById('name').value = '';
+                document.getElementById('description').value = '';
+            } catch (error) {
+                alert('创建失败：' + error.message);
+            }
+        }
+    </script>
+</body>
+
+</html>

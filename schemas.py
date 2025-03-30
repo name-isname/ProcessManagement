@@ -14,19 +14,23 @@ class ProcessPriority(str, Enum):
     LOW = "低"
 
 class ProcessBase(BaseModel):
-    id : int
-
-class Process(ProcessBase):
     name: str
     description: Optional[str] = None
     status: ProcessStatus
     priority: ProcessPriority
+
+class Process(ProcessBase):
+    id: int
     created_at: datetime
+
+    class Config:
+        from_attributes = True  # 更新为新的配置名
 
 class Processwithlogs(Process):
     logs: list[str]
 
-class ProcessCreate(Process):
+# 应该继承 ProcessBase 而不是 Process
+class ProcessCreate(ProcessBase):
     pass
 
 class ProcessUpdate(ProcessBase):
@@ -39,12 +43,15 @@ class ProcessDelete(ProcessBase):
     pass
 
 class LogBase(BaseModel):
-    id: int
+    log_entry: str
 
 class Log(LogBase):
+    id: int
     process_id: int
-    log_entry: str
     created_at: datetime
+
+    class Config:
+        from_attributes = True
 
 class LogCreate(LogBase):
     process_id: int

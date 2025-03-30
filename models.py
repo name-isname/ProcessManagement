@@ -4,7 +4,17 @@ from sqlalchemy.orm import relationship,mapped_column, Mapped
 from datetime import datetime
 from database import Base
 
+# 定义状态枚举类
+class ProcessStatus(str, enum.Enum):  # 改为与 schemas.py 一致
+    RUNNING = "运行中"
+    STOPPED = "停止"
+    PENDING = "等待中"
 
+# 定义优先级枚举类
+class ProcessPriority(str, enum.Enum):  # 改为与 schemas.py 一致
+    HIGH = "高"
+    MEDIUM = "中"
+    LOW = "低"
 
 class Process(Base):
     __tablename__ = 'processes'
@@ -32,14 +42,3 @@ class Log(Base):
         return f"Log(id={self.id!r}, process_id={self.process_id!r}, log_entry={self.log_entry!r})"
 
 
-# 定义状态枚举类
-class ProcessStatus(enum.Enum):
-    RUNNING = "运行中"
-    STOPPED = "停止"
-    PENDING = "等待中"
-
-# 定义优先级枚举类
-class ProcessPriority(enum.Enum):
-    HIGH = "高"
-    MEDIUM = "中"
-    LOW = "低"

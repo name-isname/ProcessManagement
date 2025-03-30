@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from . import models, schemas
 
 
-def get_user(db: Session, user_id: int):
+def get_user(db: Session, user_id: int) -> models.User:
     return db.query(models.User).filter(models.User.id == user_id).first()
 
 
@@ -15,7 +15,7 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
 
-def create_user(db: Session, user: schemas.UserCreate):
+def create_user(db: Session, user: schemas.UserCreate)-> models.User:
     fake_hashed_password = user.password + "notreallyhashed"
     db_user = models.User(email=user.email, hashed_password=fake_hashed_password)
     db.add(db_user)
@@ -24,7 +24,7 @@ def create_user(db: Session, user: schemas.UserCreate):
     return db_user
 
 
-def get_items(db: Session, skip: int = 0, limit: int = 100):
+def get_items(db: Session, skip: int = 0, limit: int = 100)-> list[schemas.Item]:
     return db.query(models.Item).offset(skip).limit(limit).all()
 
 
@@ -47,7 +47,7 @@ def update_user(db: Session, user_id: int, user: schemas.UserCreate):
         db.refresh(db_user)
     return db_user
 
-def delete_user(db: Session, user_id: int):
+def delete_user(db: Session, user_id: int) -> bool:
     # 获取要删除的用户
     db_user = db.query(models.User).filter(models.User.id == user_id).first()
     if db_user:
@@ -57,7 +57,7 @@ def delete_user(db: Session, user_id: int):
         return True
     return False
 
-def update_item(db: Session, item_id: int, item: schemas.ItemCreate):
+def update_item(db: Session, item_id: int, item: schemas.ItemCreate) -> models.Item:
     # 获取要更新的项目
     db_item = db.query(models.Item).filter(models.Item.id == item_id).first()
     if db_item:
