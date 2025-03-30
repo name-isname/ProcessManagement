@@ -32,3 +32,103 @@
 技术栈：
 后端使用python和fastapi，数据库使用sqlalchemy链接sqlite
 前端使用html，css和js
+
+从输入端进行限制数据，比后端检验数据更加可靠
+
+现在想一想基本的功能
+1. 主页面显示正在运行的进程
+2. 建创进程
+3. 查询不同状态的进程
+3. 选择进程（自动显示日志）
+    1. 重命名进程，修改进程的状态，修改进程的优先级，修改进程的详细信息
+    2. 删除进程
+    3. 查看进程的日志
+    4. 建创进程日志
+    5. 选择日志
+        1. 修改日志
+        2. 删除日志
+
+主页面的命令
+1. 新建进程
+2. 查询不同状态的进程
+3. 选择进程
+4. 退出
+
+选择了进程的命令
+1. 重命名进程
+2. 修改进程的状态
+3. 修改进程的优先级
+4. 修改进程的详细信息
+5. 删除进程
+6. 查看进程的日志
+7. 新建进程日志
+8. 选择日志
+9. 返回主页面
+
+选择了日志的命令
+1. 修改日志
+2. 删除日志
+
+CRUD函数
+筛选进程，根据状态选择
+get_processes_by_status
+传入状态：str，会话，返回进程列表：list
+主页面使用运行中参数来选择
+
+打印进程列表
+print_all_processes
+传入进程列表：list
+
+打印进程
+print_process
+传入进程：Process，可选参数：是否打印详细信息：bool=false，是否打印日志：bool=false
+
+选择进程
+get_process_by_id
+传入进程id：int，会话，返回进程：Process
+
+更新进程
+update_process
+传入进程：Process，会话，名称：str=None，状态：str=None，优先级：int=None，详细信息：str=None，返回进程：Process
+使用if语句来判断具体哪一项需要更新
+if name:
+    process.name = name
+if status:
+    process.status = status
+if priority:
+    process.priority = priority
+if detail:
+    process.detail = detail
+···
+
+删除进程
+delete_process
+传入进程：Process，会话，返回进程：Process
+
+打印进程日志
+print_process_all_logs
+传入日志列表：list，
+
+获取日志列表
+get_process_logs
+传入进程：Process，返回日志列表：list
+
+打印进程日志
+print_process_log
+传入日志：Log，会话
+
+选择日志
+get_log_by_id
+传入日志id：int，会话，返回日志：Log
+
+更新日志
+update_log
+传入日志：Log，会话，内容：str=None，返回日志：Log
+
+删除日志
+delete_log
+传入日志：Log，会话，返回日志：Log
+
+新建日志
+create_log
+传入进程：Process，会话，内容：str，返回日志：Log

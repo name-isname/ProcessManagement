@@ -4,25 +4,54 @@ from datetime import datetime
 from typing import Optional
 
 class ProcessStatus(str, Enum):
-    RUNNING = "running"
-    STOPPED = "stopped"
-    PENDING = "pending"
+    RUNNING = "运行中"
+    STOPPED = "停止"
+    PENDING = "等待中"
 
 class ProcessPriority(str, Enum):
-    HIGH = "high"
-    MEDIUM = "medium"
-    LOW = "low"
+    HIGH = "高"
+    MEDIUM = "中"
+    LOW = "低"
 
-class ProcessCreate(BaseModel):
+class ProcessBase(BaseModel):
+    id : int
+
+class Process(ProcessBase):
     name: str
+    description: Optional[str] = None
     status: ProcessStatus
     priority: ProcessPriority
-    details: Optional[str] = None
-
-class Process(ProcessCreate):
-    id: int
     created_at: datetime
 
-    class Config:
-        # orm_mode = True  # 旧版本写法
-        from_attributes = True  # 新版本写法
+class Processwithlogs(Process):
+    logs: list[str]
+
+class ProcessCreate(Process):
+    pass
+
+class ProcessUpdate(ProcessBase):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    status: Optional[ProcessStatus] = None
+    priority: Optional[ProcessPriority] = None
+
+class ProcessDelete(ProcessBase):
+    pass
+
+class LogBase(BaseModel):
+    id: int
+
+class Log(LogBase):
+    process_id: int
+    log_entry: str
+    created_at: datetime
+
+class LogCreate(LogBase):
+    process_id: int
+    log_entry: str
+
+class LogUpdate(LogBase):
+    log_entry: str
+
+class LogDelete(LogBase):
+    pass
