@@ -33,7 +33,7 @@ class Processwithlogs(Process):
 class ProcessCreate(ProcessBase):
     pass
 
-class ProcessUpdate(ProcessBase):
+class ProcessUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     status: Optional[ProcessStatus] = None

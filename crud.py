@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import select
+from sqlalchemy import select,delete
 
 import models, schemas
 import os
@@ -17,6 +17,7 @@ def create_process(db: Session, process: schemas.ProcessCreate) -> models.Proces
     return db_process
 
 def get_process_by_id(db: Session, process_id: int) -> models.Process:
+    print('成功')
     return db.execute(select(models.Process).where(models.Process.id == process_id)).scalar_one_or_none()
 
 def get_processes_by_status(db: Session, status: schemas.ProcessStatus) -> list[models.Process]:
@@ -29,8 +30,14 @@ def update_process(db: Session, process_id: int, process: schemas.ProcessUpdate)
     db_process = get_process_by_id(db, process_id)
     if db_process is None:
         return None
-    for key, value in process.dict(exclude_unset=True).items():
-        setattr(db_process, key, value)
+    if process.name:
+        db_process.name = process.name
+    if process.description:
+        db_process.description = process.description
+    if process.status:
+        db_process.status = process.status
+    if process.priority:
+        db_process.priority = process.priority
     db.commit()
     db.refresh(db_process)
     return db_process
@@ -38,7 +45,9 @@ def update_process(db: Session, process_id: int, process: schemas.ProcessUpdate)
 def delete_process(db: Session, process_id: int) -> models.Process:
     db_process = get_process_by_id(db, process_id)
     if db_process is None:
+        print('failed')
         return None
+    db.execute(delete(models.Log).where(models.Log.process_id == process_id))
     db.delete(db_process)
     db.commit()
     return db_process
@@ -55,7 +64,7 @@ def create_log(db: Session, process_id: int, log: schemas.LogCreate) -> models.L
         return None
     db_log = models.Log(
         process_id=process_id,
-        content=log.content
+        log_entry=log.log_entry
     )
     db.add(db_log)
     db.commit()
