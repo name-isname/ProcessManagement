@@ -30,9 +30,16 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 def read_root(request:Request) -> HTMLResponse:
     return templates.TemplateResponse("index.html",{"request":request})
 
-@app.post("/processes/",response_model=schemas.Process)
+@app.post("/create-processes/",response_model=schemas.Process)
 def create_process(process:schemas.ProcessCreate,db:Session = Depends(get_db))->models.Process:
     return crud.create_process(db=db,process=process)
+
+@app.get("/home",response_model=list[schemas.Process])
+def read_processes_in_homepage(db:Session = Depends(get_db))->list[models.Process]:
+    db_process = crud.get_processes_by_status(db,"运行中")
+    if db_process is None:
+        raise HTTPException(status_code=404,detail="Process not found")
+    return db_process
 
 if __name__ == "__main__":
     import uvicorn
