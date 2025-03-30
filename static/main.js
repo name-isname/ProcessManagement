@@ -437,3 +437,119 @@ document.addEventListener('DOMContentLoaded', () => {
         loadProcessesByStatus('等待中');
     });
 });
+
+
+// ================ 日志相关函数 ================
+// 查看日志
+// 全局变量声明
+let mdEditor = null;
+
+async function viewLogs(processId) {
+    try {
+        // 获取日志数据
+        const response = await fetch(`/get-logs-of-process/${processId}`);
+        if (!response.ok) {
+            throw new Error('获取日志失败');
+        }
+        const logs = await response.json();
+
+        // 更新日志列表
+        const logsContainer = document.getElementById('logsContainer');
+        logsContainer.innerHTML = '';
+
+        if (logs.length === 0) {
+            logsContainer.innerHTML = '<div class="text-center text-muted">暂无日志</div>';
+        } else {
+            logs.forEach(log => {
+                const logEntry = document.createElement('div');
+                logEntry.className = 'log-entry';
+                logEntry.innerHTML = `
+                    <div class="log-time">${new Date(log.created_at).toLocaleString()}</div>
+                    <div class="log-content markdown-content">${marked.parse(log.log_entry)}</div>
+                `;
+                logsContainer.appendChild(logEntry);
+            });
+        }
+
+        // 获取模态框元素
+        const logModalElement = document.getElementById('logModal');
+        
+        // 初始化 CodeMirror 编辑器
+        if (!mdEditor) {
+            mdEditor = CodeMirror.fromTextArea(document.getElementById('newLogContent'), {
+                mode: 'markdown',
+                theme: 'nord',
+                lineWrapping: true,
+                lineNumbers: true,
+                placeholder: '在此输入新日志内容（支持 Markdown 格式）',
+                extraKeys: {
+                    'Enter': 'newlineAndIndentContinueMarkdownList',
+                    'Tab': 'indentMore',
+                    'Shift-Tab': 'indentLess'
+                }
+            });
+        } else {
+            mdEditor.setValue(''); // 清空编辑器内容
+        }
+
+        // 设置添加日志按钮的处理函数
+        const addLogBtn = document.getElementById('addLogBtn');
+        addLogBtn.onclick = () => {
+            const content = mdEditor.getValue().trim();
+            if (!content) {
+                alert('日志内容不能为空');
+                return;
+            }
+            addLog(processId, content);
+        };
+
+        // 监听模态框隐藏事件
+        const modalInstance = new bootstrap.Modal(logModalElement);
+        logModalElement.addEventListener('hidden.bs.modal', function () {
+            document.body.classList.remove('modal-open');
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) {
+                backdrop.remove();
+            }
+            // 清空编辑器
+            mdEditor.setValue('');
+        });
+
+        // 显示模态框
+        modalInstance.show();
+
+    } catch (error) {
+        console.error('加载日志失败:', error);
+        alert('加载日志失败：' + error.message);
+    }
+}
+
+// 修改添加日志函数
+async function addLog(processId, logContent) {
+    try {
+        const response = await fetch(`/create-log-of-process/${processId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ log_entry: logContent })
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.detail || '添加日志失败');
+        }
+
+        // 清空输入框
+        document.getElementById('newLogContent').value = '';
+        
+        // 刷新日志列表
+        viewLogs(processId);
+        
+        alert('日志添加成功！');
+
+    } catch (error) {
+        console.error('添加日志失败:', error);
+        alert('添加日志失败：' + error.message);
+    }
+}

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 
+<!-- 在 head 部分添加 Font Awesome 图标库 -->
 <head>
     <title>进程管理系统</title>
     <meta charset="UTF-8">
@@ -9,6 +10,17 @@
     <!-- 添加 marked.js -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <head>
+        <!-- 现有的依赖 -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/nord.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/markdown/markdown.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/display/placeholder.min.js"></script>
+    </head>
 </head>
 
 <body>
@@ -92,11 +104,46 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- 日志模态框 -->
+            <div class="modal fade" id="logModal" tabindex="-1">
+                <div class="modal-dialog modal-xl">  <!-- 将 modal-lg 改为 modal-xl -->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">进程日志</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- 日志列表 -->
+                            <div id="logsList" class="mb-4">
+                                <h6>历史日志</h6>
+                                <div id="logsContainer" class="logs-container">
+                                    <!-- 日志将通过 JavaScript 动态插入 -->
+                                </div>
+                            </div>
+                            
+                            <!-- 添加新日志 -->
+                            <div id="addLogForm">
+                                <h6>添加新日志</h6>
+                                <div class="mb-3">
+                                    <div class="modal-body">
+                                        <div id="logsContainer" class="logs-container mb-3"></div>
+                                        <textarea id="newLogContent" class="form-control" placeholder="在此输入新日志内容（支持 Markdown 格式）"></textarea>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <button type="button" class="btn btn-primary" id="addLogBtn">添加日志</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+            <script src="/static/main.js"></script>
         </div>
     </div>
-
-    <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
-    <script src="/static/main.js"></script>
 </body>
 
 </html>
