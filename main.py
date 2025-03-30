@@ -36,9 +36,9 @@ def create_process(process:schemas.ProcessCreate,db:Session = Depends(get_db))->
 
 @app.get("/home",response_model=list[schemas.Process])
 def read_processes_in_homepage(db:Session = Depends(get_db))->list[models.Process]:
-    db_process = crud.get_processes_by_status(db,"运行中")
-    if db_process is None:
-        raise HTTPException(status_code=404,detail="Process not found")
+    db_process = crud.get_processes_by_status(db,schemas.ProcessStatus.RUNNING)
+    if not db_process:  # 空列表也是合法的，不应该抛出404
+        return []
     return db_process
 
 @app.get("/delete-process/{process_id}",response_model=schemas.Process)
@@ -57,13 +57,13 @@ def update_process(process_id:int,process:schemas.ProcessUpdate,db:Session = Dep
 
 @app.get("/get-logs-of-process/{process_id}",response_model=list[schemas.Log])
 def get_logs_of_process(process_id:int,db:Session = Depends(get_db)) -> list[models.Log]:
-    db_logs = crud.get_logs_by_process_id(db,process_id)
+    db_logs = crud.get_all-logs_by_process_id(db,process_id)
     if db_logs is None:
         raise HTTPException(status_code=404,detail="Log not found")
     return db_logs
 
-@app.post("/create-logs-of-process/{process_id}",response_model=schemas.Log)
-def create_logs_of_process(process_id:int,log:schemas.LogCreate,db:Session = Depends(get_db)) -> models.Log:
+@app.post("/create-log-of-process/{process_id}",response_model=schemas.Log)
+def create_log_of_process(process_id:int,log:schemas.LogCreate,db:Session = Depends(get_db)) -> models.Log:
     db_log = crud.create_log(db,process_id,log)
     if db_log is None:
         raise HTTPException(status_code=404,detail="Log not found")

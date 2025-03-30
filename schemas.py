@@ -19,15 +19,12 @@ class ProcessBase(BaseModel):
     status: ProcessStatus
     priority: ProcessPriority
 
+    class Config:
+        from_attributes = True
+
 class Process(ProcessBase):
     id: int
     created_at: datetime
-
-    class Config:
-        from_attributes = True  # 更新为新的配置名
-
-class Processwithlogs(Process):
-    logs: list[str]
 
 # 应该继承 ProcessBase 而不是 Process
 class ProcessCreate(ProcessBase):
@@ -39,26 +36,28 @@ class ProcessUpdate(BaseModel):
     status: Optional[ProcessStatus] = None
     priority: Optional[ProcessPriority] = None
 
-class ProcessDelete(ProcessBase):
-    pass
+    class Config:
+        from_attributes = True
 
 class LogBase(BaseModel):
     log_entry: str
+    
+    class Config:
+        from_attributes = True
 
 class Log(LogBase):
     id: int
     process_id: int
     created_at: datetime
 
-    class Config:
-        from_attributes = True
-
 class LogCreate(LogBase):
-    process_id: int
-    log_entry: str
+    pass
 
 class LogUpdate(LogBase):
-    log_entry: str
-
-class LogDelete(LogBase):
     pass
+
+class ProcessWithLogs(Process):
+    logs: list[Log]
+
+    class Config:
+        from_attributes = True
