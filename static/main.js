@@ -21,11 +21,12 @@ function getStatusColor(status) {
 }
 
 // 优先级颜色映射
+// 优先级颜色映射
 function getPriorityColor(priority) {
     const colors = {
-        '高': 'danger',
-        '中': 'warning',
-        '低': 'info'
+        '高': 'high',
+        '中': 'medium',
+        '低': 'low'
     };
     return colors[priority] || 'secondary';
 }
@@ -140,8 +141,8 @@ function createProcessRow(process) {
     const descriptionHtml = description !== '-' ? marked.parse(description) : '-';
 
     row.innerHTML = `
-        <td>${process.id}</td>
-        <td>${process.name}</td>
+        <td class="text-center">#${process.id}</td>
+        <td class="process-name">${process.name}</td>
         <td>
             <div class="description-cell">
                 <div class="description-content markdown-content">
@@ -152,17 +153,25 @@ function createProcessRow(process) {
                 </div>
             </div>
         </td>
-        <td><span class="badge bg-${getStatusColor(process.status)}">${process.status}</span></td>
-        <td><span class="badge bg-${getPriorityColor(process.priority)}">${process.priority}</span></td>
-        <td>${new Date(process.created_at).toLocaleString()}</td>
-        <td>
-            <button class="btn btn-sm btn-info btn-operation" onclick="viewLogs(${process.id})">日志</button>
-            <button class="btn btn-sm btn-warning btn-operation" onclick="editProcess(${process.id})">编辑</button>
-            <button class="btn btn-sm btn-danger btn-operation" onclick="deleteProcess(${process.id})">删除</button>
+        <td class="text-center">
+            <span class="badge bg-${getStatusColor(process.status)} btn-operation">${process.status}</span>
+        </td>
+        <td class="text-center">
+            <span class="badge bg-${getPriorityColor(process.priority)} btn-operation">${process.priority}</span>
+        </td>
+        <td class="time-column">${new Date(process.created_at).toLocaleString()}</td>
+        <td class="text-end">
+            <button class="btn btn-sm btn-info btn-operation" onclick="viewLogs(${process.id})">
+                <i class="fas fa-book-open me-1"></i>日志
+            </button>
+            <button class="btn btn-sm btn-warning btn-operation" onclick="editProcess(${process.id})">
+                <i class="fas fa-edit me-1"></i>编辑
+            </button>
+            <button class="btn btn-sm btn-danger btn-operation" onclick="deleteProcess(${process.id})">
+                <i class="fas fa-trash me-1"></i>删除
+            </button>
         </td>
     `;
-
-    addExpandFeature(row);
     return row;
 }
 

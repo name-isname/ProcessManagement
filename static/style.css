@@ -150,10 +150,13 @@
 
 .form-label {
     color: var(--text-color);
-    font-weight: 700;  /* 改为更粗的字体 */
-    font-size: 1rem;   /* 稍微调大字号 */
+    font-weight: 700;
+    /* 改为更粗的字体 */
+    font-size: 1rem;
+    /* 稍微调大字号 */
     margin-bottom: 8px;
-    letter-spacing: 0.5px;  /* 添加字间距 */
+    letter-spacing: 0.5px;
+    /* 添加字间距 */
 }
 
 /* 可选：添加一个小图标的位置 */
@@ -165,14 +168,16 @@
     vertical-align: middle;
 }
 
-.form-control, .form-select {
+.form-control,
+.form-select {
     border: 1px solid var(--border-color);
     padding: 10px 15px;
     border-radius: 8px;
     transition: all 0.3s ease;
 }
 
-.form-control:focus, .form-select:focus {
+.form-control:focus,
+.form-select:focus {
     border-color: var(--accent-color);
     box-shadow: 0 0 0 0.2rem rgba(121, 168, 199, 0.25);
 }
@@ -219,12 +224,222 @@ textarea.form-control {
     border-color: #cbd5e0;
 }
 
+/* 进程列表样式优化 */
 .process-list {
     background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    border: 1px solid var(--border-color);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.process-list h3 {
+    color: var(--text-color);
+    font-weight: 600;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+/* 表格样式优化 */
+.table {
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0 6px;
+    /* 减小行间距 */
+}
+
+.table thead th {
+    border: none;
+    background: var(--primary-color);
+    padding: 12px 15px;
+    /* 减小内边距 */
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 1rem;
+    /* 增大表头字体 */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.table tbody td {
+    padding: 12px 15px;
+    /* 减小单元格内边距 */
+    vertical-align: middle;
+    border: none;
+    background: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 1rem;
+    /* 增大正文字体 */
+}
+
+/* ID列样式 */
+.table td.text-center:first-child {
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 1rem;
+    /* 增大ID字体 */
+    font-weight: 500;
+    color: #6c757d;
+    letter-spacing: 0.5px;
+    padding: 12px 15px;
+    background: rgba(108, 117, 125, 0.05);
+}
+
+/* 进程名称样式 */
+.process-name {
+    font-weight: bold;
+    /* 加粗 */
+    color: var(--text-color);
+    font-size: 1.1rem;
+    letter-spacing: 0.2px;
+}
+改
+/* 状态和优先级徽章基础样式 */
+.badge {
+    padding: 6px 12px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    letter-spacing: 0.3px;
+    border-radius: 6px;
+    text-transform: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* 状态徽章颜色 */
+.bg-success {
+    background-color: #79c7a0 !important;  /* 柔和的绿色 */
+    color: #ffffff !important;
+}
+
+.bg-danger {
+    background-color: #c77979 !important;  /* 柔和的红色 */
+    color: #ffffff !important;
+}
+
+.bg-warning {
+    background-color: #79a8c7 !important;  /* 使用主题色 */
+    color: #ffffff !important;
+}
+
+/* 优先级徽章颜色 */
+.bg-high {
+    background-color: #79a8c7 !important;  /* 使用主题色 */
+    color: #ffffff !important;
+}
+
+.bg-medium {
+    background-color: #92b5d0 !important;  /* 主题色的浅色版本 */
+    color: #ffffff !important;
+}
+
+.bg-low {
+    background-color: #adc2d6 !important;  /* 更浅的版本 */
+    color: #ffffff !important;
+}
+
+/* 徽章悬停效果 */
+.badge:hover {
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
+
+/* 时间列样式 */
+.time-column {
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 0.95rem;
+    /* 增大时间字体 */
+    color: #6c757d;
+    letter-spacing: -0.2px;
+}
+
+/* 描述内容样式 */
+.description-content {
+    font-size: 1rem;
+    /* 增大描述文本字体 */
+    line-height: 1.5;
+    color: #4a5568;
+}
+
+/* 表格内容样式优化 */
+.table tbody td {
+    padding: 15px;
+    vertical-align: middle;
+    border: none;
+    background: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 0.95rem;
+}
+
+/* ID列样式 */
+.table td.text-center:first-child {
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #6c757d;
+    letter-spacing: 0.5px;
+    padding: 15px 20px;
+    background: rgba(108, 117, 125, 0.05);
+    border-radius: 6px;
+}
+
+/* 进程名称样式 */
+.process-name {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 1rem;
+    letter-spacing: 0.2px;
+}
+
+/* 状态和优先级徽章样式 */
+.badge {
+    padding: 8px 12px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    border-radius: 6px;
+    text-transform: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* 时间列样式优化 */
+.time-column {
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 0.85rem;
+    color: #6c757d;
+    letter-spacing: -0.2px;
+}
+
+/* 操作按钮样式优化 */
+.btn-operation {
+    padding: 6px 12px;
+    margin: 0 3px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+/* 进程名称样式 */
+.process-name {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+/* 描述单元格样式 */
+.description-cell {
+    max-width: 300px;
+    padding: 10px 15px;
+}
+
+.description-content {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #666;
+}
+
+/* 时间列样式 */
+.time-column {
+    font-size: 0.85rem;
+    color: #666;
+    white-space: nowrap;
 }
 
 .components {
@@ -310,10 +525,12 @@ h3 {
 
 .description-content {
     overflow: hidden;
-    max-height: 100px;  /* 初始高度 */
+    max-height: 100px;
+    /* 初始高度 */
     transition: max-height 0.3s ease-out;
     position: relative;
-    margin-bottom: 20px;  /* 添加底部边距，为展开按钮留空间 */
+    margin-bottom: 20px;
+    /* 添加底部边距，为展开按钮留空间 */
 }
 
 .description-cell.expanded .description-content {
@@ -327,15 +544,18 @@ h3 {
     width: 100%;
     text-align: center;
     margin: 0;
-    padding: 30px 0 5px 0;  /* 调整内边距 */
-    background-image: linear-gradient(to bottom, transparent, white 70%);  /* 调整渐变效果 */
+    padding: 30px 0 5px 0;
+    /* 调整内边距 */
+    background-image: linear-gradient(to bottom, transparent, white 70%);
+    /* 调整渐变效果 */
     cursor: pointer;
 }
 
 .description-cell.expanded .toggle-description {
     background-image: none;
     padding: 5px 0;
-    position: relative;  /* 改为相对定位 */
+    position: relative;
+    /* 改为相对定位 */
 }
 
 .toggle-text {
@@ -353,7 +573,8 @@ h3 {
     margin-bottom: 0.5rem;
 }
 
-.markdown-content ul, .markdown-content ol {
+.markdown-content ul,
+.markdown-content ol {
     padding-left: 1.5rem;
 }
 
