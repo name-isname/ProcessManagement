@@ -57,7 +57,7 @@ def update_process(process_id:int,process:schemas.ProcessUpdate,db:Session = Dep
 
 @app.get("/get-logs-of-process/{process_id}",response_model=list[schemas.Log])
 def get_logs_of_process(process_id:int,db:Session = Depends(get_db)) -> list[models.Log]:
-    db_logs = crud.get_all-logs_by_process_id(db,process_id)
+    db_logs = crud.get_all_logs_of_process(db,process_id)
     if db_logs is None:
         raise HTTPException(status_code=404,detail="Log not found")
     return db_logs

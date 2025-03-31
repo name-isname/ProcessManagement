@@ -2,316 +2,92 @@
 <html>
 
 <head>
-    <title>创建进程</title>
+    <title>进程管理系统</title>
     <meta charset="UTF-8">
-    <style>
-        /* 添加展开详情的样式 */
-        .process-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-        }
-
-        .process-details {
-            display: none;
-            margin-top: 10px;
-        }
-
-        .process-details.show {
-            display: block;
-        }
-
-        .detail-toggle {
-            cursor: pointer;
-            padding: 5px 10px;
-            background: #f0f0f0;
-            border: none;
-            border-radius: 3px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .process-card {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-        }
-
-        .status-badge {
-            padding: 3px 8px;
-            border-radius: 3px;
-            margin-right: 10px;
-        }
-
-        .status-badge.运行中 {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .status-badge.停止 {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .status-badge.等待中 {
-            background-color: #FFC107;
-        }
-
-        .priority-badge {
-            padding: 3px 8px;
-            border-radius: 3px;
-        }
-
-        .priority-badge.高 {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .priority-badge.中 {
-            background-color: #2196F3;
-            color: white;
-        }
-
-        .priority-badge.低 {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .delete-btn {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .delete-btn:hover {
-            background-color: #d32f2f;
-        }
-    </style>
+    <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/style.css" rel="stylesheet">
+    <!-- 添加 marked.js -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
 </head>
 
 <body>
-    <h2>创建新进程</h2>
-    <div class="form-group">
-        <label for="name">进程名称：</label>
-        <input type="text" id="name" required>
-    </div>
-    <div class="form-group">
-        <label for="description">描述：</label>
-        <textarea id="description"></textarea>
-    </div>
-    <div class="form-group">
-        <label for="status">状态：</label>
-        <select id="status">
-            <option value="运行中">运行中</option>
-            <option value="停止">停止</option>
-            <option value="等待中">等待中</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="priority">优先级：</label>
-        <select id="priority">
-            <option value="高">高</option>
-            <option value="中">中</option>
-            <option value="低">低</option>
-        </select>
-    </div>
-    <button onclick="createProcess()">创建进程</button>
-    <button onclick="getProcesses()">获取进程</button>
-
-    <div id="process-container"></div>
-
-    <script>
-
-
-        async function createProcess() {
-            const processData = {
-                name: document.getElementById('name').value,
-                description: document.getElementById('description').value,
-                status: document.getElementById('status').value,
-                priority: document.getElementById('priority').value
-            };
-
-            try {
-                const response = await fetch('/create-processes/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(processData)
-                });
-
-                if (!response.ok) {
-                    throw new Error('创建失败');
-                }
-
-                const result = await response.json();
-                alert('进程创建成功！');
-                // 可以选择重置表单或跳转到其他页面
-                document.getElementById('name').value = '';
-                document.getElementById('description').value = '';
-            } catch (error) {
-                alert('创建失败：' + error.message);
-            }
-        }
-
-        async function getProcesses() {
-            try {
-                const response = await fetch('/home', {
-                    method: 'GET',
-                });
-                if (!response.ok) {
-                    throw new Error('获取进程列表失败');
-                }
-
-            } catch (error) {
-                console.error('获取进程列表失败：', error);
-                return [];
-            }
-        }
-
-
-
-
-        // 假设从后端获取的进程列表数据
-        const processes = [
-            {
-                id: 1,
-                name: "测试进程1",
-                description: "这是描述",
-                status: "运行中",
-                priority: "高"
-            },
-            // ... 更多进程
-        ];
-
-        function createProcessCard(process) {
-            return `
-        <div class="process-card" data-id="${process.id}">
-            <div class="process-main">
-                <h3>${process.name}</h3>
-                <div class="process-details" id="details-${process.id}">
-                    <p ondblclick="makeEditable(this, ${process.id}, 'status')">状态：<span class="status-badge ${process.status}">${process.status}</span></p>
-                    <p ondblclick="makeEditable(this, ${process.id}, 'priority')">优先级：<span class="priority-badge ${process.priority}">${process.priority}</span></p>
-                    <p ondblclick="makeEditable(this, ${process.id}, 'description')">描述：${process.description || '无描述'}</p>
-                    <button class="delete-btn" onclick="deleteProcess(${process.id})">删除进程</button>
-                </div>
+    <div class="wrapper">
+        <!-- 侧边栏 -->
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>进程管理系统</h3>
             </div>
-            <button class="detail-toggle" onclick="toggleDetails(${process.id})">详情</button>
+            <ul class="list-unstyled components">
+                <li>
+                    <button id="createProcessBtn" class="btn btn-primary sidebar-btn">新建进程</button>
+                </li>
+                <li>
+                    <a href="#" class="nav-link">进程列表</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- 主内容区域 -->
+        <div id="content" class="content">
+            <!-- 创建进程表单（默认隐藏） -->
+            <div id="createProcessForm" class="process-form d-none">
+                <h3>创建新进程</h3>
+                <form>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">进程名称</label>
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">描述</label>
+                        <textarea class="form-control" id="description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="status" class="form-label">状态</label>
+                        <select class="form-select" id="status" required>
+                            <option value="运行中">运行中</option>
+                            <option value="停止">停止</option>
+                            <option value="等待中">等待中</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="priority" class="form-label">优先级</label>
+                        <select class="form-select" id="priority" required>
+                            <option value="高">高</option>
+                            <option value="中">中</option>
+                            <option value="低">低</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">创建</button>
+                    <button type="button" class="btn btn-secondary" id="cancelCreate">取消</button>
+                </form>
+            </div>
+
+            <!-- 进程列表 -->
+            <div id="processList" class="process-list">
+                <h3>运行中的进程</h3>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>进程名称</th>
+                            <th style="width: 30%">描述</th>
+                            <th>状态</th>
+                            <th>优先级</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="processTableBody">
+                        <!-- 进程数据将通过 JavaScript 动态插入 -->
+                    </tbody>
+                </table>
+            </div>
         </div>
-    `;
-        }
-        function makeEditable(element, processId, field) {
-            const currentText = element.querySelector('span')?.textContent || element.textContent.split('：')[1];
-            let input;
+    </div>
 
-            if (field === 'status') {
-                input = document.createElement('select');
-                ['运行中', '停止', '等待中'].forEach(status => {
-                    const option = document.createElement('option');
-                    option.value = status;
-                    option.textContent = status;
-                    if (status === currentText) option.selected = true;
-                    input.appendChild(option);
-                });
-            } else if (field === 'priority') {
-                input = document.createElement('select');
-                ['高', '中', '低'].forEach(priority => {
-                    const option = document.createElement('option');
-                    option.value = priority;
-                    option.textContent = priority;
-                    if (priority === currentText) option.selected = true;
-                    input.appendChild(option);
-                });
-            } else {
-                input = document.createElement('input');
-                input.type = 'text';
-                input.value = currentText;
-            }
-
-            input.addEventListener('blur', async () => {
-                try {
-                    const response = await fetch(`/processes/${processId}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            [field]: input.value
-                        })
-                    });
-
-                    if (!response.ok) throw new Error('更新失败');
-
-                    // 更新成功后刷新进程列表
-                    fetchAndRenderProcesses();
-                } catch (error) {
-                    console.error('更新失败:', error);
-                    alert('更新失败');
-                }
-            });
-
-            const originalContent = element.innerHTML;
-            element.innerHTML = '';
-            element.appendChild(input);
-            input.focus();
-        }
-        function toggleDetails(processId) {
-            const details = document.getElementById(`details-${processId}`);
-            details.classList.toggle('show');
-        }
-
-        function renderProcessList(processes) {
-            const container = document.getElementById('process-container');
-            container.innerHTML = processes.map(createProcessCard).join('');
-        }
-
-        // 获取数据并渲染
-        async function fetchAndRenderProcesses() {
-            try {
-                const response = await fetch('/home');
-                const processes = await response.json();
-                renderProcessList(processes);
-            } catch (error) {
-                console.error('获取进程列表失败:', error);
-            }
-        }
-
-        // 初始加载
-        fetchAndRenderProcesses();
-
-        async function deleteProcess(processId) {
-            if (!confirm('确定要删除这个进程吗？')) {
-                return;
-            }
-            try {
-                const response = await fetch(`/delete-process/${processId}`, {
-                    method: 'GET',
-                });
-                if (!response.ok) {
-                    throw new Error('删除失败');
-                }
-                // 删除成功后刷新列表
-                fetchAndRenderProcesses();
-            } catch (error) {
-                console.error('删除失败:', error);
-                alert('删除失败');
-            }
-        }
-
-
-    </script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/main.js"></script>
 </body>
 
 </html>
