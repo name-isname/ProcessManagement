@@ -13,28 +13,108 @@
     background-color: var(--primary-color);
 }
 
+/* 侧边栏基础样式 */
 .sidebar {
     width: 250px;
-    background: var(--secondary-color);
-    padding: 20px;
-    border-right: 1px solid var(--border-color);
+    background: linear-gradient(180deg, var(--secondary-color) 0%, #ffffff 100%);
+    padding: 25px;
+    border-right: 1px solid rgba(184, 216, 232, 0.3);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar-header {
-    padding-bottom: 20px;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--text-color);
+    padding-bottom: 25px;
+    margin-bottom: 25px;
+    border-bottom: 2px solid rgba(184, 216, 232, 0.3);
 }
 
+.sidebar-header h3 {
+    color: var(--text-color);
+    font-weight: 600;
+    margin: 0;
+    font-size: 1.5rem;
+    letter-spacing: 0.5px;
+}
+
+/* 导航链接容器 */
+.list-unstyled.components {
+    margin: 0;
+    padding: 0;
+}
+
+.list-unstyled.components li {
+    margin-bottom: 8px;
+}
+
+/* 导航链接样式 */
+.nav-link {
+    color: var(--text-color);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    background: transparent;
+}
+
+.nav-link:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0;
+    background: var(--accent-color);
+    border-radius: 10px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 0;
+}
+
+.nav-link span {
+    position: relative;
+    z-index: 1;
+}
+
+.nav-link:hover {
+    color: var(--accent-color);
+    transform: translateX(5px);
+    background: rgba(121, 168, 199, 0.1);
+}
+
+.nav-link.active {
+    color: white;
+    background: var(--accent-color);
+    box-shadow: 0 4px 15px rgba(121, 168, 199, 0.35);
+    transform: translateX(5px);
+}
+
+.nav-link.active:hover {
+    transform: translateX(5px) translateY(-1px);
+}
+
+/* 创建进程按钮样式 */
 .sidebar-btn {
     width: 100%;
-    margin: 10px 0;
-    background-color: var(--accent-color) !important;
+    margin: 15px 0;
+    padding: 12px 20px;
+    background: linear-gradient(45deg, var(--accent-color), #92b5d0) !important;
     border: none !important;
+    border-radius: 10px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(121, 168, 199, 0.2);
+    transition: all 0.3s ease;
 }
 
 .sidebar-btn:hover {
-    background-color: #5d8ba8 !important;
+    background: linear-gradient(45deg, #92b5d0, var(--accent-color)) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(121, 168, 199, 0.3);
 }
 
 .content {
@@ -151,12 +231,47 @@ textarea.form-control {
     margin-top: 20px;
 }
 
+/* 导航链接样式 */
 .nav-link {
     color: var(--text-color);
-    padding: 10px;
+    padding: 12px 15px;
     display: block;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    transition: all 0.3s ease;
+    position: relative;
+    font-weight: 500;
+}
+
+.nav-link:hover {
+    background: rgba(121, 168, 199, 0.1);
+    color: var(--accent-color);
+}
+
+.nav-link.active {
+    background: var(--accent-color);
+    color: white;
+    box-shadow: 0 2px 8px rgba(121, 168, 199, 0.3);
+}
+
+.nav-link.active:hover {
+    background: var(--accent-color);
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* 可选：添加一个小图标指示当前选中状态 */
+.nav-link.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 70%;
+    background: white;
+    border-radius: 0 2px 2px 0;
 }
 
 .nav-link:hover {
@@ -347,11 +462,34 @@ h3 {
     opacity: 1;
 }
 
+/* 新增日志编辑器样式 */
 .new-log-section {
     background: #fff;
     border-radius: 8px;
     padding: 1.5rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-top: 2rem;
+}
+
+.CodeMirror {
+    height: auto !important;
+    min-height: 150px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px;
+    font-family: inherit;
+}
+
+.CodeMirror-scroll {
+    min-height: 150px;
+    max-height: 300px;
+}
+
+/* 确保编辑器容器有正确的尺寸 */
+.new-log-section .CodeMirror-wrap {
+    display: block;
+    width: 100%;
+    position: relative;
 }
 
 .new-log-title {

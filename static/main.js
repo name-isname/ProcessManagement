@@ -557,6 +557,7 @@ async function viewLogs(processId) {
         const logModalElement = document.getElementById('logModal');
 
         // 初始化 CodeMirror 编辑器
+        // 在 viewLogs 函数中修改初始化 CodeMirror 编辑器的部分
         if (!mdEditor) {
             mdEditor = CodeMirror.fromTextArea(document.getElementById('newLogContent'), {
                 mode: 'markdown',
@@ -564,14 +565,21 @@ async function viewLogs(processId) {
                 lineWrapping: true,
                 lineNumbers: true,
                 placeholder: '在此输入新日志内容（支持 Markdown 格式）',
+                viewportMargin: Infinity,
                 extraKeys: {
                     'Enter': 'newlineAndIndentContinueMarkdownList',
                     'Tab': 'indentMore',
                     'Shift-Tab': 'indentLess'
                 }
             });
+
+            // 添加一个延时来刷新编辑器
+            setTimeout(() => {
+                mdEditor.refresh();
+            }, 100);
         } else {
             mdEditor.setValue(''); // 清空编辑器内容
+            mdEditor.refresh(); // 刷新编辑器布局
         }
 
         // 设置添加日志按钮的处理函数
