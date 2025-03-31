@@ -2,25 +2,25 @@
 <html>
 
 <!-- 在 head 部分添加 Font Awesome 图标库 -->
+
 <head>
     <title>进程管理系统</title>
     <meta charset="UTF-8">
-    <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="/static/lib/bootstrap.min.css" rel="stylesheet">
+    <!-- 自定义样式 -->
     <link href="/static/style.css" rel="stylesheet">
-    <!-- 添加 marked.js -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Marked.js -->
+    <script src="/static/lib/marked.min.js"></script>
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
-    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <head>
-        <!-- 现有的依赖 -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/nord.min.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/markdown/markdown.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/display/placeholder.min.js"></script>
-    </head>
+    <!-- Font Awesome -->
+    <link href="/static/lib/fontawesome.min.css" rel="stylesheet">
+    <!-- CodeMirror -->
+    <link rel="stylesheet" href="/static/lib/codemirror.min.css">
+    <link rel="stylesheet" href="/static/lib/nord.min.css">
+    <script src="/static/lib/codemirror.min.js"></script>
+    <script src="/static/lib/markdown.min.js"></script>
+    <script src="/static/lib/placeholder.min.js"></script>
 </head>
 
 <body>
@@ -107,7 +107,7 @@
 
             <!-- 日志模态框 -->
             <div class="modal fade" id="logModal" tabindex="-1">
-                <div class="modal-dialog modal-xl">  <!-- 将 modal-lg 改为 modal-xl -->
+                <div class="modal-dialog modal-xl"> <!-- 将 modal-lg 改为 modal-xl -->
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">进程日志</h5>
@@ -121,14 +121,15 @@
                                     <!-- 日志将通过 JavaScript 动态插入 -->
                                 </div>
                             </div>
-                            
+
                             <!-- 添加新日志 -->
                             <div id="addLogForm">
                                 <h6>添加新日志</h6>
                                 <div class="mb-3">
                                     <div class="modal-body">
                                         <div id="logsContainer" class="logs-container mb-3"></div>
-                                        <textarea id="newLogContent" class="form-control" placeholder="在此输入新日志内容（支持 Markdown 格式）"></textarea>
+                                        <textarea id="newLogContent" class="form-control"
+                                            placeholder="在此输入新日志内容（支持 Markdown 格式）"></textarea>
                                     </div>
                                 </div>
                                 <div class="text-end">
@@ -140,7 +141,8 @@
                 </div>
             </div>
 
-            <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+            <!-- 在 body 结束标签前 -->
+            <script src="/static/lib/bootstrap.bundle.min.js"></script>
             <script src="/static/main.js"></script>
         </div>
     </div>

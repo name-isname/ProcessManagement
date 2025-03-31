@@ -267,7 +267,7 @@ const originalSubmitHandler = async (e) => {
             createProcessForm.classList.add('d-none');
             processListDiv.classList.remove('d-none');
             form.reset();
-            
+
             // 根据当前激活状态刷新列表
             const currentStatus = getCurrentActiveStatus();
             if (currentStatus === 'all') {
@@ -453,6 +453,9 @@ async function viewLogs(processId) {
         }
         const logs = await response.json();
 
+        // 按创建时间降序排序（新的在前）
+        logs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
         // 更新日志列表
         const logsContainer = document.getElementById('logsContainer');
         logsContainer.innerHTML = '';
@@ -460,20 +463,99 @@ async function viewLogs(processId) {
         if (logs.length === 0) {
             logsContainer.innerHTML = '<div class="text-center text-muted">暂无日志</div>';
         } else {
+            // 在 viewLogs 函数中修改 logs.forEach 部分
             logs.forEach(log => {
                 const logEntry = document.createElement('div');
                 logEntry.className = 'log-entry';
                 logEntry.innerHTML = `
                     <div class="log-time">${new Date(log.created_at).toLocaleString()}</div>
-                    <div class="log-content markdown-content">${marked.parse(log.log_entry)}</div>
+                    <div class="log-content markdown-content" ondblclick="editLogContent(${log.id}, this, ${processId})" data-raw-content="${log.log_entry.replace(/"/g, '&quot;')}">${marked.parse(log.log_entry)}</div>
+                    <i class="fas fa-trash delete-log-btn" onclick="deleteLog(${log.id}, ${processId})"></i>
                 `;
                 logsContainer.appendChild(logEntry);
             });
+
+            // 添加编辑日志内容的函数
+            window.editLogContent = async function (logId, element, processId) {
+                // 获取原始内容，移除 HTML 标签
+                const currentContent = element.getAttribute('data-raw-content') ||
+                    element.textContent.replace(/<[^>]*>/g, '').trim();
+
+                // 保存原始 HTML，用于取消时恢复
+                const originalHtml = element.innerHTML;
+
+                // 创建编辑器实例
+                const editArea = document.createElement('div');
+                editArea.style.minHeight = '100px';  // 确保编辑区域有足够高度
+
+                // 先将编辑区域添加到元素中
+                element.innerHTML = '';
+                element.appendChild(editArea);
+
+                // 初始化 CodeMirror
+                const editor = CodeMirror(editArea, {
+                    value: currentContent,
+                    mode: 'markdown',
+                    theme: 'nord',
+                    lineWrapping: true,
+                    lineNumbers: true,
+                    viewportMargin: Infinity  // 允许编辑器自动增长高度
+                });
+
+                // 添加保存和取消按钮
+                const buttonContainer = document.createElement('div');
+                buttonContainer.className = 'edit-buttons mt-2';
+                buttonContainer.innerHTML = `
+                    <button class="btn btn-sm btn-primary me-2">保存</button>
+                    <button class="btn btn-sm btn-secondary">取消</button>
+                `;
+                element.appendChild(buttonContainer);
+
+                // 保存按钮事件
+                buttonContainer.querySelector('.btn-primary').onclick = async () => {
+                    const newContent = editor.getValue().trim();
+                    if (!newContent) {
+                        alert('日志内容不能为空');
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch(`/update-log/${logId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ log_entry: newContent })
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('更新失败');
+                        }
+
+                        // 更新成功后刷新日志列表
+                        viewLogs(processId);
+
+                    } catch (error) {
+                        alert('更新日志失败：' + error.message);
+                    }
+                };
+
+                // 修改取消按钮事件
+                buttonContainer.querySelector('.btn-secondary').onclick = () => {
+                    element.innerHTML = originalHtml;  // 使用保存的原始 HTML 恢复
+                };
+
+                // 自动刷新编辑器布局
+                setTimeout(() => {
+                    editor.refresh();
+                    editor.focus();
+                }, 10);
+            };
         }
 
         // 获取模态框元素
         const logModalElement = document.getElementById('logModal');
-        
+
         // 初始化 CodeMirror 编辑器
         if (!mdEditor) {
             mdEditor = CodeMirror.fromTextArea(document.getElementById('newLogContent'), {
@@ -542,14 +624,43 @@ async function addLog(processId, logContent) {
 
         // 清空输入框
         document.getElementById('newLogContent').value = '';
-        
+
         // 刷新日志列表
         viewLogs(processId);
-        
+
         alert('日志添加成功！');
 
     } catch (error) {
         console.error('添加日志失败:', error);
         alert('添加日志失败：' + error.message);
+    }
+}
+
+// 添加到日志相关函数部分
+async function deleteLog(logId, processId) {
+    if (!confirm('确定要删除这条日志吗？此操作不可撤销。')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/delete-log/${logId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.detail || '删除失败');
+        }
+
+        // 删除成功后刷新日志列表
+        viewLogs(processId);
+        alert('日志删除成功！');
+
+    } catch (error) {
+        console.error('删除日志失败:', error);
+        alert('删除日志失败：' + error.message);
     }
 }
