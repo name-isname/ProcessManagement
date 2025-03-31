@@ -83,6 +83,24 @@ def delete_log(log_id:int,db:Session = Depends(get_db)) -> models.Log:
         raise HTTPException(status_code=404,detail="Log not found")
     return db_log
 
+@app.get("/all-processes", response_model=list[schemas.Process])
+def read_all_processes(db: Session = Depends(get_db)) -> list[models.Process]:
+    db_processes = crud.get_all_processes(db)
+    return db_processes
+
+@app.get("/processes-by-status/{status}", response_model=list[schemas.Process])
+def read_processes_by_status(status: str, db: Session = Depends(get_db)) -> list[models.Process]:
+    db_processes = crud.get_processes_by_status(db, status)
+    if not db_processes:  # 空列表是合法的
+        return []
+    return db_processes
+
+@app.get("/get-process/{process_id}", response_model=schemas.Process)
+def get_process(process_id: int, db: Session = Depends(get_db)) -> models.Process:
+    db_process = crud.get_process_by_id(db, process_id)
+    if db_process is None:
+        raise HTTPException(status_code=404, detail="Process not found")
+    return db_process
 
 if __name__ == "__main__":
     import uvicorn
