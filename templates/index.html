@@ -106,35 +106,20 @@
             </div>
 
             <!-- 日志模态框 -->
-            <div class="modal fade" id="logModal" tabindex="-1">
-                <div class="modal-dialog modal-xl"> <!-- 将 modal-lg 改为 modal-xl -->
+            <!-- 日志模态框 -->
+            <div class="modal fade" id="logModal" tabindex="-1" aria-labelledby="logModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">进程日志</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            <h5 class="modal-title" id="logModalLabel">进程日志</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <!-- 日志列表 -->
-                            <div id="logsList" class="mb-4">
-                                <h6>历史日志</h6>
-                                <div id="logsContainer" class="logs-container">
-                                    <!-- 日志将通过 JavaScript 动态插入 -->
-                                </div>
-                            </div>
-
-                            <!-- 添加新日志 -->
-                            <div id="addLogForm">
-                                <h6>添加新日志</h6>
-                                <div class="mb-3">
-                                    <div class="modal-body">
-                                        <div id="logsContainer" class="logs-container mb-3"></div>
-                                        <textarea id="newLogContent" class="form-control"
-                                            placeholder="在此输入新日志内容（支持 Markdown 格式）"></textarea>
-                                    </div>
-                                </div>
-                                <div class="text-end">
-                                    <button type="button" class="btn btn-primary" id="addLogBtn">添加日志</button>
-                                </div>
+                            <div id="logsContainer" class="logs-container"></div>
+                            <div class="new-log-section">
+                                <h6 class="new-log-title">添加新日志</h6>
+                                <textarea id="newLogContent" class="form-control"></textarea>
+                                <button id="addLogBtn" class="btn btn-primary mt-3">添加日志</button>
                             </div>
                         </div>
                     </div>
