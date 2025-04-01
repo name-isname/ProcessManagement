@@ -28,13 +28,23 @@ This software is licensed under the GNU General Public License v3.0.
 
 首先将本项目的文件都解压，记录下解压后的文件夹路径
 
-打开cmd，检查是否有python
-如果没有python就自己装一个python
+打开cmd，输入以下命令，检查是否有python
+```cmd
+python --version
+```
+如果没有python环境，可以参照下面的教程搭建python环境
+参见 https://www.runoob.com/python3/python3-install.html
 
+以我为例，我的路径是F:\ProcessManagement
+所以后面所有的“文件夹路径”都替换成 F:\ProcessManagement
 
 在cmd里面，输入
 ```cmd
 pip install -r 文件夹路径\requirements.txt
+```
+非魔法可以使用
+```cmd
+pip install -r 文件夹路径\requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 等待完成
 
