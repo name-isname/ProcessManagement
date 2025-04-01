@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<!-- 在 head 部分添加 Font Awesome 图标库 -->
+
+<head>
+    <title>进程管理系统</title>
+    <meta charset="UTF-8">
+    <!-- Bootstrap -->
+    <link href="/static/lib/bootstrap.min.css" rel="stylesheet">
+    <!-- 自定义样式 -->
+    <link href="/static/style.css" rel="stylesheet">
+    <!-- Marked.js -->
+    <script src="/static/lib/marked.min.js"></script>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <!-- Font Awesome -->
+    <link href="/static/lib/fontawesome.min.css" rel="stylesheet">
+    <!-- CodeMirror -->
+    <link rel="stylesheet" href="/static/lib/codemirror.min.css">
+    <link rel="stylesheet" href="/static/lib/nord.min.css">
+    <script src="/static/lib/codemirror.min.js"></script>
+    <script src="/static/lib/markdown.min.js"></script>
+    <script src="/static/lib/placeholder.min.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- 侧边栏 -->
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>进程管理系统</h3>
+            </div>
+            <!-- 侧边栏导航链接 -->
+            <ul class="list-unstyled components">
+                <li>
+                    <button id="createProcessBtn" class="btn btn-primary sidebar-btn">
+                        新建进程
+                    </button>
+                </li>
+                <li>
+                    <a href="#" id="allProcessesBtn" class="nav-link">
+                        <span>所有进程</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="runningProcessesBtn" class="nav-link active">
+                        <span>运行中进程</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="stoppedProcessesBtn" class="nav-link">
+                        <span>已停止进程</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="waitingProcessesBtn" class="nav-link">
+                        <span>等待中进程</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- 主内容区域 -->
+        <div id="content" class="content">
+            <!-- 创建进程表单（默认隐藏） -->
+            <div id="createProcessForm" class="process-form d-none">
+                <h3>创建新进程</h3>
+                <form>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">进程名称</label>
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">描述</label>
+                        <textarea class="form-control" id="description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="status" class="form-label">状态</label>
+                        <select class="form-select" id="status" required>
+                            <option value="运行中">运行中</option>
+                            <option value="停止">停止</option>
+                            <option value="等待中">等待中</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="priority" class="form-label">优先级</label>
+                        <select class="form-select" id="priority" required>
+                            <option value="高">高</option>
+                            <option value="中">中</option>
+                            <option value="低">低</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">创建</button>
+                    <button type="button" class="btn btn-secondary" id="cancelCreate">取消</button>
+                </form>
+            </div>
+
+            <!-- 进程列表 -->
+            <div id="processList" class="process-list">
+                <h3>运行中的进程</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="width: 5%">ID</th>
+                            <th style="width: 15%">进程名称</th>
+                            <th style="width: 30%">描述</th>
+                            <th class="text-center" style="width: 10%">状态</th>
+                            <th class="text-center" style="width: 10%">优先级</th>
+                            <th style="width: 15%">创建时间</th>
+                            <th class="text-end" style="width: 15%">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="processTableBody">
+                        <!-- 进程数据将通过 JavaScript 动态插入 -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 日志模态框 -->
+            <!-- 日志模态框 -->
+            <div class="modal fade" id="logModal" tabindex="-1" aria-labelledby="logModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="logModalLabel">进程日志</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="logsContainer" class="logs-container"></div>
+                            <div class="new-log-section">
+                                <h6 class="new-log-title">添加新日志</h6>
+                                <textarea id="newLogContent" class="form-control"></textarea>
+                                <button id="addLogBtn" class="btn btn-primary mt-3">添加日志</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 在 body 结束标签前 -->
+            <script src="/static/lib/bootstrap.bundle.min.js"></script>
+            <script src="/static/main.js"></script>
+        </div>
+    </div>
+</body>
+
+</html>
