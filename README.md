@@ -47,11 +47,13 @@ Start-Process $url
 cd 文件夹路径
 python main.py
 ```
+完成后鼠标右键ps1文件
+点击菜单中的“使用Powershell运行”
 
-如果显示不允许运行，用管理员身份打开powershell，运行这句话
+如果显示不允许运行，或者打开之后就闪退
+用管理员身份打开powershell，运行这句话
 
 ```
 Set-ExecutionPolicy RemoteSigned
 ```
 然后输入Y就行
-
