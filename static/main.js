@@ -229,7 +229,7 @@ async function deleteProcess(processId) {
             console.log('正在刷新特定状态进程列表:', currentStatus);
             loadProcessesByStatus(currentStatus);
         }
-        alert('进程删除成功！');
+
 
     } catch (error) {
         console.error('删除进程出错，详细信息:', error);
@@ -272,7 +272,6 @@ const originalSubmitHandler = async (e) => {
         });
 
         if (response.ok) {
-            alert('进程创建成功！');
             createProcessForm.classList.add('d-none');
             processListDiv.classList.remove('d-none');
             form.reset();
@@ -355,7 +354,6 @@ async function editProcess(processId) {
                 });
 
                 if (response.ok) {
-                    alert('进程更新成功！');
                     createProcessForm.classList.add('d-none');
                     processListDiv.classList.remove('d-none');
                     form.reset();
@@ -645,7 +643,7 @@ async function addLog(processId, logContent) {
         // 刷新日志列表
         viewLogs(processId);
 
-        alert('日志添加成功！');
+
 
     } catch (error) {
         console.error('添加日志失败:', error);
@@ -674,8 +672,6 @@ async function deleteLog(logId, processId) {
 
         // 删除成功后刷新日志列表
         viewLogs(processId);
-        alert('日志删除成功！');
-
     } catch (error) {
         console.error('删除日志失败:', error);
         alert('删除日志失败：' + error.message);
