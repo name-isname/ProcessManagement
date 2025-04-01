@@ -1,3 +1,6 @@
+Copyright (c) 2025 nameisname
+This software is licensed under the GNU General Public License v3.0.
+
 # 进程管理任务系统
 
 ## 项目目标
@@ -20,3 +23,35 @@
 
 ## 参考的开源项目
 目前没有指定参考的开源项目，但可以根据需求选择合适的项目进行参考。
+
+# 如何快速部署本项目
+
+首先将本项目的文件都解压，记录下解压后的文件夹路径
+
+打开cmd，检查是否有python
+如果没有python就自己装一个python
+
+
+在cmd里面，输入
+```cmd
+pip install -r 文件夹路径\requirements.txt
+```
+等待完成
+
+
+然后编写一个ps1脚本
+先新建一个txt文件，复制下面的内容，写好了把后缀改成.ps1
+```
+$url = "http://localhost:8000/"
+Start-Process $url
+cd 文件夹路径
+python main.py
+```
+
+如果显示不允许运行，用管理员身份打开powershell，运行这句话
+
+```
+Set-ExecutionPolicy RemoteSigned
+```
+然后输入Y就行
+
