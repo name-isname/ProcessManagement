@@ -35,7 +35,7 @@ python --version
 如果没有python环境，可以参照下面的教程搭建python环境
 参见 https://www.runoob.com/python3/python3-install.html
 
-以我为例，我的路径是F:\ProcessManagement
+以我为例，我的路径是F:\ProcessManagement，后面所有的文件都是在这个文件夹下
 所以后面所有的“文件夹路径”都替换成 F:\ProcessManagement
 
 在cmd里面，输入
@@ -46,11 +46,16 @@ pip install -r 文件夹路径\requirements.txt
 ```cmd
 pip install -r 文件夹路径\requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
+所以我的输入是
+```
+pip install -r F:\ProcessManagement\requirements.txt
+```
 等待完成
 
 
 然后编写一个ps1脚本
-先新建一个txt文件，复制下面的内容，写好了把后缀改成.ps1
+先新建一个txt文件，复制下面的内容，更换里面的文件夹路径
+写好了把后缀改成.ps1
 ```
 $url = "http://localhost:8000/"
 Start-Process $url
@@ -59,11 +64,23 @@ python main.py
 ```
 完成后鼠标右键ps1文件
 点击菜单中的“使用Powershell运行”
+等一会就加载出来了
 
-如果显示不允许运行，或者打开之后就闪退
+## 注意事项
+如果打开之后等了一会还是显示无法加载
+可以将ps1脚本拖入Powershell中运行
+
+如果显示不允许运行
 用管理员身份打开powershell，运行这句话
-
 ```
 Set-ExecutionPolicy RemoteSigned
 ```
-然后输入Y就行
+然后输入Y
+再重新打开
+
+## 为ps1建立快捷方式
+在快捷方式中填写
+```
+powershell.exe -ExecutionPolicy Bypass -File "完整路径\脚本名.ps1"
+```
+可以使用build\icons\icon.ico作为快捷方式的图标

@@ -1,13 +1,18 @@
+
+import os
+import sys
 from fastapi import Depends,FastAPI,HTTPException,status,Request
 from fastapi.responses import JSONResponse,HTMLResponse
 from fastapi.templating import Jinja2Templates
-
 from fastapi.staticfiles import StaticFiles
-
 import crud,models,schemas
-
 from database import SessionLocal,engine
 from sqlalchemy.orm import Session
+
+if getattr(sys, 'frozen', False):
+    BASE_DIR = os.path.dirname(sys.executable)
+else:
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -22,9 +27,9 @@ def get_db():
         db.close()
 
 # html 模板
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 # 静态文件
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 
 @app.get("/",response_class=HTMLResponse)
 def read_root(request:Request) -> HTMLResponse:
@@ -104,4 +109,4 @@ def get_process(process_id: int, db: Session = Depends(get_db)) -> models.Proces
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app="main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run(app=app, host="127.0.0.1", port=8000)
